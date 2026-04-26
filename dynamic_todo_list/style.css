@@ -1,0 +1,473 @@
+/*
+  ============================================================
+  Project Title : Dynamic To-Do List (Experiment 4)
+  File          : style.css
+  Author        : [Your Name]
+  Date          : April 26, 2026
+  Description   : Styles for TaskFlow — warm cream & forest-green
+                  editorial aesthetic. Clean layout, clear task
+                  separation, smooth micro-interactions.
+  ============================================================
+*/
+
+/* ============================================================
+   1. CSS CUSTOM PROPERTIES  (design tokens — one place to change)
+   ============================================================ */
+:root {
+  /* Colours */
+  --cream:          #faf6f0;          /* page background            */
+  --card-bg:        #ffffff;          /* main app card              */
+  --green-dark:     #1a3a2a;          /* primary text & accents     */
+  --green-mid:      #2d6a4f;          /* buttons, chip borders      */
+  --green-light:    #52b788;          /* hover / done states        */
+  --green-glow:     rgba(82,183,136,.15);
+  --amber:          #e07b54;          /* pending badge              */
+  --amber-light:    rgba(224,123,84,.12);
+  --red:            #d62828;          /* delete button              */
+  --red-light:      rgba(214,40,40,.10);
+  --blue:           #2176ae;          /* edit button                */
+  --blue-light:     rgba(33,118,174,.10);
+  --border:         #e4ddd4;
+  --border-focus:   var(--green-mid);
+  --text-main:      #1a1a1a;
+  --text-muted:     #7a7060;
+  --text-done:      #a09080;
+
+  /* Spacing */
+  --radius-sm:  8px;
+  --radius-md:  14px;
+  --radius-lg:  24px;
+  --radius-xl:  32px;
+
+  /* Typography */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Outfit', sans-serif;
+
+  /* Motion */
+  --ease: 220ms cubic-bezier(.25,.46,.45,.94);
+}
+
+/* ============================================================
+   2. RESET & BASE
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.65;
+  background-color: var(--cream);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 48px 16px 80px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   3. DECORATIVE BACKGROUND BLOBS
+   ============================================================ */
+.bg-blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.blob-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(82,183,136,.18) 0%, transparent 70%);
+  top: -120px;
+  right: -150px;
+}
+
+.blob-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(224,123,84,.12) 0%, transparent 70%);
+  bottom: -80px;
+  left: -100px;
+}
+
+/* ============================================================
+   4. APP CARD
+   ============================================================ */
+.app-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 660px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 8px 40px rgba(26,58,42,.08), 0 2px 8px rgba(0,0,0,.04);
+  overflow: hidden;
+  animation: cardReveal .5s cubic-bezier(.22,1,.36,1) both;
+}
+
+@keyframes cardReveal {
+  from { opacity: 0; transform: translateY(32px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0)   scale(1);   }
+}
+
+/* ============================================================
+   5. HEADER
+   ============================================================ */
+.app-header {
+  padding: 36px 36px 28px;
+  background: var(--green-dark);
+  color: #fff;
+}
+
+.header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+/* App title — serif display font */
+.app-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 6vw, 3rem);
+  font-weight: 900;
+  letter-spacing: -.5px;
+  line-height: 1;
+  color: #fff;
+}
+
+/* Small pill badge in header */
+.header-badge {
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 999px;
+  padding: 4px 14px;
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.75);
+  white-space: nowrap;
+  margin-top: 6px;
+}
+
+/* Short description */
+.app-desc {
+  color: rgba(255,255,255,.65);
+  font-size: .9rem;
+  max-width: 480px;
+  margin-bottom: 24px;
+  font-weight: 300;
+}
+
+/* ── Stats bar (Bonus Task 6) ── */
+.stats-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.stat-chip {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 999px;
+  padding: 6px 16px;
+}
+
+.stat-chip--done    { background: rgba(82,183,136,.25); border-color: rgba(82,183,136,.4); }
+.stat-chip--pending { background: rgba(224,123,84,.22); border-color: rgba(224,123,84,.35); }
+
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.stat-label {
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.6);
+}
+
+/* ============================================================
+   6. INPUT SECTION  (Tasks 2 & 3)
+   ============================================================ */
+.input-section {
+  padding: 28px 36px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Row: text input + button side by side */
+.input-row {
+  display: flex;
+  gap: 10px;
+}
+
+/* Task text input */
+.task-input {
+  flex: 1;
+  padding: 13px 18px;
+  font-family: var(--font-body);
+  font-size: .95rem;
+  color: var(--text-main);
+  background: var(--cream);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: border-color var(--ease), box-shadow var(--ease);
+}
+
+.task-input::placeholder { color: var(--text-muted); }
+
+.task-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 4px var(--green-glow);
+  background: #fff;
+}
+
+/* Generic button base */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 13px 22px;
+  font-family: var(--font-body);
+  font-size: .88rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background var(--ease), transform var(--ease), box-shadow var(--ease);
+  white-space: nowrap;
+}
+
+.btn:active { transform: scale(.96); }
+
+/* Add Task button */
+.btn-add {
+  background: var(--green-mid);
+  color: #fff;
+}
+
+.btn-add:hover {
+  background: var(--green-dark);
+  box-shadow: 0 4px 18px rgba(45,106,79,.3);
+}
+
+/* Validation / error message */
+.error-msg {
+  font-size: .82rem;
+  color: var(--red);
+  padding-left: 4px;
+  min-height: 20px;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity var(--ease), transform var(--ease);
+}
+
+.error-msg.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   7. TASK LIST  (Tasks 2, 3, 4, 5, 6)
+   ============================================================ */
+.list-section {
+  padding: 20px 36px 36px;
+}
+
+/* The <ul> itself */
+.task-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Empty state ── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 52px 20px;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--text-muted);
+  font-size: .9rem;
+  text-align: center;
+}
+
+.empty-icon { font-size: 2.6rem; }
+
+/* ── Individual task item ── */
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--cream);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: background var(--ease), border-color var(--ease),
+              transform var(--ease), opacity var(--ease);
+  animation: itemSlideIn .25s cubic-bezier(.22,1,.36,1) both;
+}
+
+@keyframes itemSlideIn {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.task-item:hover {
+  background: #fff;
+  border-color: #cdc4b8;
+}
+
+/* Completed state — Task 6 */
+.task-item.completed {
+  background: rgba(82,183,136,.07);
+  border-color: rgba(82,183,136,.35);
+}
+
+.task-item.completed .task-text {
+  text-decoration: line-through;
+  color: var(--text-done);
+}
+
+/* Removal animation */
+.task-item.removing {
+  opacity: 0;
+  transform: translateX(24px) scale(.97);
+  pointer-events: none;
+}
+
+/* ── Checkbox  (Task 6) ── */
+.task-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  transition: border-color var(--ease), background var(--ease);
+}
+
+.task-checkbox:hover  { border-color: var(--green-light); }
+.task-checkbox:checked {
+  background: var(--green-light);
+  border-color: var(--green-light);
+}
+
+/* Checkmark tick */
+.task-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 6px;
+  width: 5px; height: 9px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+/* ── Task text ── */
+.task-text {
+  flex: 1;
+  font-size: .95rem;
+  color: var(--text-main);
+  word-break: break-word;
+}
+
+/* ── Inline edit input ── */
+.task-edit-input {
+  flex: 1;
+  padding: 6px 12px;
+  font-family: var(--font-body);
+  font-size: .95rem;
+  color: var(--text-main);
+  background: #fff;
+  border: 1.5px solid var(--border-focus);
+  border-radius: var(--radius-sm);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--green-glow);
+}
+
+/* ── Action buttons group ── */
+.task-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* Small icon action buttons */
+.btn-sm {
+  padding: 6px 13px;
+  font-size: .78rem;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid transparent;
+  font-weight: 600;
+}
+
+/* Edit button */
+.btn-edit {
+  background: var(--blue-light);
+  color: var(--blue);
+  border-color: rgba(33,118,174,.2);
+}
+.btn-edit:hover { background: rgba(33,118,174,.2); }
+
+/* Save button (replaces Edit while editing) */
+.btn-save {
+  background: rgba(82,183,136,.15);
+  color: var(--green-mid);
+  border-color: rgba(82,183,136,.3);
+}
+.btn-save:hover { background: rgba(82,183,136,.28); }
+
+/* Delete button */
+.btn-delete {
+  background: var(--red-light);
+  color: var(--red);
+  border-color: rgba(214,40,40,.2);
+}
+.btn-delete:hover { background: rgba(214,40,40,.2); }
+
+/* ============================================================
+   8. RESPONSIVE — mobile ≤ 480 px
+   ============================================================ */
+@media (max-width: 480px) {
+  .app-header { padding: 28px 20px 22px; }
+  .input-section { padding: 22px 20px 0; }
+  .list-section  { padding: 16px 20px 28px; }
+
+  .input-row { flex-direction: column; }
+  .btn-add   { width: 100%; justify-content: center; }
+
+  .task-item { flex-wrap: wrap; gap: 10px; }
+  .task-actions { width: 100%; justify-content: flex-end; }
+}

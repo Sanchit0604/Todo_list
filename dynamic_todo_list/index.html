@@ -1,0 +1,121 @@
+<!--
+  ============================================================
+  Project Title : Dynamic To-Do List (Experiment 4)
+  Author        : [Your Name]
+  Date          : April 26, 2026
+  Description   : A fully interactive To-Do List web application
+                  built with vanilla HTML, CSS, and JavaScript.
+                  Features include: adding tasks, editing tasks,
+                  deleting tasks, marking tasks as complete,
+                  and a live task counter — all without any
+                  page reload or external libraries.
+  ============================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskFlow — Dynamic To-Do List</title>
+
+  <!-- Google Fonts: Playfair Display (heading) + Outfit (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Outfit:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ========== BACKGROUND DECORATION ========== -->
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+
+  <!-- ========== MAIN APP CARD ========== -->
+  <div class="app-card">
+
+    <!-- ── HEADER ── -->
+    <header class="app-header">
+      <div class="header-top">
+        <h1 class="app-title">TaskFlow</h1>
+        <span class="header-badge">To-Do App</span>
+      </div>
+      <p class="app-desc">
+        Capture what matters, check things off, and move forward.
+        Add, edit, complete, or delete tasks in real time — no page reload needed.
+      </p>
+
+      <!-- Live stats bar (Bonus Task 6) -->
+      <div class="stats-bar" id="stats-bar">
+        <div class="stat-chip">
+          <span class="stat-num" id="stat-total">0</span>
+          <span class="stat-label">Total</span>
+        </div>
+        <div class="stat-chip stat-chip--done">
+          <span class="stat-num" id="stat-done">0</span>
+          <span class="stat-label">Done</span>
+        </div>
+        <div class="stat-chip stat-chip--pending">
+          <span class="stat-num" id="stat-pending">0</span>
+          <span class="stat-label">Pending</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── INPUT AREA (Task 2) ── -->
+    <section class="input-section" aria-label="Add a new task">
+      <div class="input-row">
+        <!--
+          Task input field — captures user text.
+          JavaScript reads this value when Add Task is clicked.
+        -->
+        <input
+          type="text"
+          id="task-input"
+          class="task-input"
+          placeholder="What do you need to do today?"
+          maxlength="200"
+          autocomplete="off"
+          aria-label="New task description"
+        />
+
+        <!-- Add Task button — triggers handleAddTask() in script.js -->
+        <button id="add-btn" class="btn btn-add" aria-label="Add task">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Add Task
+        </button>
+      </div>
+
+      <!-- Validation error message (shown by JS) -->
+      <p class="error-msg" id="error-msg" role="alert" aria-live="polite"></p>
+    </section>
+
+    <!-- ── TASK LIST (Task 2) ── -->
+    <main class="list-section" aria-label="Task list">
+      <!--
+        Tasks are injected here dynamically by script.js.
+        Each task becomes an <li> inside this <ul>.
+      -->
+      <ul class="task-list" id="task-list" role="list">
+
+        <!-- Empty state — hidden when tasks exist -->
+        <li class="empty-state" id="empty-state" aria-hidden="true">
+          <div class="empty-icon">📋</div>
+          <p>No tasks yet. Add one above to get started!</p>
+        </li>
+
+      </ul>
+    </main>
+
+  </div><!-- /.app-card -->
+
+  <!-- Main JavaScript file (deferred — runs after DOM is parsed) -->
+  <script src="script.js" defer></script>
+</body>
+</html>
